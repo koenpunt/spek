@@ -24,6 +24,7 @@ import org.spekframework.intellij.support.SpekCommonProgramRunConfigurationParam
 import org.spekframework.intellij.util.maybeGetContext
 import org.spekframework.spek2.runtime.scope.Path
 import org.spekframework.spek2.runtime.scope.PathBuilder
+import kotlin.reflect.full.memberFunctions
 
 abstract class SpekRunConfigurationProducer(val producerType: ProducerType, type: SpekConfigurationType)
     : RunConfigurationProducer<SpekRunConfiguration<*>>(type) {
@@ -104,9 +105,12 @@ abstract class SpekRunConfigurationProducer(val producerType: ProducerType, type
             if (path != null) {
                 configuration.data.path = path
                 configuration.data.generatedNameHint = nameHint
-                val kotlinFacetSettings = KotlinFacetSettingsProvider.getInstance(context.project)!!
-                        .getInitializedSettings(context.module)
+                val kotlinFacetSettingsProvider = KotlinFacetSettingsProvider.getInstance(context.project)!!
 
+                // Use reflection to make up for API differences
+                val kotlinFacetSettings = kotlinFacetSettingsProvider::class.memberFunctions.firstOrNull {
+                    it.name == "getInitializedSettings"
+                }?.call(kotlinFacetSettingsProvider, context.module) as KotlinFacetSettings
 
                 var canRun = false
                 if (isPlatformSupported(kotlinFacetSettings.targetPlatform!!.idePlatformKind)) {
