@@ -55,10 +55,18 @@ val buildMatrix = mapOf(
         ij.VersionRange("233.1", "233.*"),
         listOf("java", "org.jetbrains.kotlin"), // :231-1.7.10-release-334-IJ8228
         JavaVersion.VERSION_17
+    ),
+    "IJ241" to ij.BuildConfig(
+        "241.17011.79",
+        "IJ2024.1",
+        "IJ183",
+        ij.VersionRange("241.1", "241.*"),
+        listOf("java", "org.jetbrains.kotlin"),
+        JavaVersion.VERSION_17
     )
 )
 
-val sdkVersion = project.properties["ij.version"] ?: "IJ233"
+val sdkVersion = project.properties["ij.version"] ?: "IJ241"
 val settings = checkNotNull(buildMatrix[sdkVersion])
 
 java {

@@ -6,7 +6,7 @@ plugins {
 intellij {
     pluginName.set("spek-base-jvm")
     plugins.set(listOf("org.jetbrains.kotlin"))
-    version.set("2023.3")
+    version.set("2024.1")
 }
 
 dependencies {
